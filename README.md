@@ -98,7 +98,7 @@ nslookup google.com
 
 ```bash
 git clone https://github.com/yohandion06/setup_wsl
-cd setup_wsl
+cd setup_wsl/ansible
 ```
 
 ## Nettoyage des anciennes configurations (si nécessaire)
@@ -125,7 +125,7 @@ sudo apt update
 ## Lancement du playbook Ansible
 
 ```bash
-ansible-playbook -i inventory.yml playbook.yml --ask-become-pass
+ansible-playbook -i "localhost," -c local setup_wsl.yml --ask-become-pass
 ```
 
 ## Outils installés
