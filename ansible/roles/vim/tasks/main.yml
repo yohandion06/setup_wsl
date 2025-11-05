@@ -1,0 +1,19 @@
+---
+- name: Install Vim
+  become: true
+  apt:
+    name: vim
+    state: present
+    update_cache: yes
+
+- name: Install Vundle
+  git:
+    repo: "https://github.com/VundleVim/Vundle.vim.git"
+    dest: "{{ ansible_env.HOME }}/.vim/bundle/Vundle.vim"
+
+- name: Copy vimrc configuration
+  copy:
+    src: .vimrc
+    dest: "{{ ansible_env.HOME }}/.vimrc"
+    mode: '0644'
+...

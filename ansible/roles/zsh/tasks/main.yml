@@ -1,0 +1,63 @@
+---
+# Ensure Zsh, Autojump, FZF are installed
+- name: Install Zsh and dependencies
+  become: true
+  apt:
+    name:
+      - zsh
+      - autojump
+      - fzf
+    state: present
+    update_cache: yes
+
+# Set Zsh as default shell
+- name: Set Zsh as default shell
+  user:
+    name: "{{ ansible_env.USER }}"
+    shell: /usr/bin/zsh
+
+# Install Oh My Zsh if not already installed
+- name: Install Oh My Zsh
+  become: no
+  shell: |
+    if [ ! -d ~/.oh-my-zsh ]; then
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    fi
+
+# Install Powerlevel10k theme
+- name: Install Powerlevel10k
+  git:
+    repo: "https://github.com/romkatv/powerlevel10k.git"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    update: no
+
+# Install only the plugins that are in your .zshrc
+- name: Install zsh plugins
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/{{ item.name }}"
+    update: no
+  loop:
+    - { name: "zsh-autosuggestions", repo: "https://github.com/zsh-users/zsh-autosuggestions" }
+    - { name: "fzf-tab", repo: "https://github.com/Aloxaf/fzf-tab" }
+    - { name: "autojump", repo: "https://github.com/wting/autojump" }
+    - { name: "git-open", repo: "https://github.com/paulirish/git-open" }
+    - { name: "jsontools", repo: "https://github.com/skyzyx/zsh-jsontools" }
+
+# Copy user's .zshrc as-is
+- name: Copy user .zshrc
+  copy:
+    src: .zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    mode: '0644'
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+
+- name: Copy Powerlevel10k configuration
+  copy:
+    src: .p10k.zsh
+    dest: "{{ ansible_env.HOME }}/.p10k.zsh"
+    mode: '0644'
+    owner: "{{ ansible_env.USER }}"
+    group: "{{ ansible_env.USER }}"
+...

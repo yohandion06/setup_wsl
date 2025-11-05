@@ -1,0 +1,33 @@
+---
+- name: Install tmux packages
+  become: true
+  apt:
+    name:
+      - tmux
+    state: present
+    update_cache: yes
+
+- name: Clone tmux plugin manager
+  git:
+    repo: "https://github.com/tmux-plugins/tpm"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+    update: no
+
+- name: Deploy .tmux.conf
+  copy:
+    src: .tmux.conf
+    dest: "{{ ansible_env.HOME }}/.tmux.conf"
+    mode: '0644'
+
+- name: Clone additional tmux themes
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/{{ item.name }}"
+    update: no
+  loop:
+    - { name: "dracula-tmux", repo: "https://github.com/dracula/tmux" }
+    - { name: "nord-tmux", repo: "https://github.com/arcticicestudio/nord-tmux" }
+    - { name: "tmux-resurrect", repo: "https://github.com/tmux-plugins/tmux-resurrect" }
+    - { name: "tmux-continuum", repo: "https://github.com/tmux-plugins/tmux-continuum" }
+    - { name: "tmux-sensible", repo: "https://github.com/tmux-plugins/tmux-sensible" }
+...

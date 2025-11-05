@@ -1,0 +1,12 @@
+---
+- name: Setup WSL environment
+  hosts: localhost
+  roles:
+    - role: common
+    - role: docker
+    - role: kubectl
+    - role: terraform
+    # - role: tmux
+    # - role: zsh
+    # - role: vim
+...
