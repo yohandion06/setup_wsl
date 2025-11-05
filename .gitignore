@@ -1,5 +1,8 @@
-# Created by https://www.toptal.com/developers/gitignore/api/vim,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=vim,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/vim,ansible,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=vim,ansible,visualstudiocode
+
+### Ansible ###
+*.retry
 
 ### Vim ###
 # Swap
@@ -41,4 +44,4 @@ tags
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/vim,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/vim,ansible,visualstudiocode

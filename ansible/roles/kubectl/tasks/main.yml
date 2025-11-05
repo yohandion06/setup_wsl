@@ -3,37 +3,28 @@
   become: true
   apt:
     name:
-      - apt-transport-https
       - ca-certificates
-      - curl
+      - gnupg
     state: present
     update_cache: yes
 
-- name: Ensure directory for keyrings exists
-  file:
-    path: /usr/share/keyrings
-    state: directory
-    mode: '0755'
-  become: yes
-
-- name: Download Kubernetes GPG key
-  ansible.builtin.get_url:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    dest: /usr/share/keyrings/kubernetes-archive-keyring.gpg
-    mode: '0644'
-  become: yes
-
-- name: Add Kubernetes repository
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
-    filename: kubernetes
+- name: Add Kubernetes GPG key
+  become: true
+  ansible.builtin.apt_key:
+    url: https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key
+    keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     state: present
-  become: yes
+
+- name: Add Kubernetes APT repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /"
+    state: present
+    filename: kubernetes
 
 - name: Install kubectl
+  become: true
   apt:
     name: kubectl
     state: present
-    update_cache: yes
-  become: yes
 ...

@@ -1,11 +1,16 @@
 ---
-- name: Install tmux packages
+- name: Install tmux
   become: true
   apt:
-    name:
-      - tmux
+    name: tmux
     state: present
     update_cache: yes
+
+- name: Create .tmux/plugins directory
+  file:
+    path: "{{ ansible_env.HOME }}/.tmux/plugins"
+    state: directory
+    mode: '0755'
 
 - name: Clone tmux plugin manager
   git:
